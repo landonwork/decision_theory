@@ -128,7 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Build directory and make files
+# Sphinx Make files
 Makefile
 make.bat
-build/
