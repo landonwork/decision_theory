@@ -31,6 +31,8 @@ release = '12/05/2021'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+        'nbsphinx',
+        'nbsphinx_link',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -40,7 +42,10 @@ templates_path = ['_templates']
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
-
+# source_suffix = {
+  #       '.rst':'restructuredtext',
+  #       '.ipynb':'jupyter'
+  #       }
 
 # -- Options for HTML output -------------------------------------------------
 

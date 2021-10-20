@@ -10,7 +10,8 @@ Welcome to Decision Theory's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   Course Overview <overview>
+   Elements of Decision Theory <elements>
 
 Indices and tables
 ==================
