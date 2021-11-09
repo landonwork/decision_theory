@@ -1,0 +1,83 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "b73197f0-42ad-4b51-b720-7b75aa49dfd8",
+   "metadata": {},
+   "source": [
+    "# Statistics\n",
+    "\n",
+    "## Introduction to statistics"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d5ccd313-f091-422a-aa82-d3fbd99c6caf",
+   "metadata": {},
+   "source": [
+    "## Samples"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "de26d4d6-98a9-4454-85e5-0412c09ab1c3",
+   "metadata": {},
+   "source": [
+    "## Central Limit Theorem"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7a40607f-662f-463d-81be-a3fa90c539ff",
+   "metadata": {},
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "584c42fb-2f2c-4221-b696-46a0d143927e",
+   "metadata": {},
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e64af825-28cb-403c-a5b2-0deb24cfd913",
+   "metadata": {},
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2b532072-3dd4-4f8f-a16d-28e628abb341",
+   "metadata": {},
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d77c2dbe-ab80-47bc-9b41-05233bee8d24",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

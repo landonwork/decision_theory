@@ -1,0 +1,518 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Probability &#8212; Decision Theory 12/05/2021 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Probability">
+<h1>Probability<a class="headerlink" href="#Probability" title="Permalink to this headline">¶</a></h1>
+<section id="Ideologies-on-Probability">
+<h2>Ideologies on Probability<a class="headerlink" href="#Ideologies-on-Probability" title="Permalink to this headline">¶</a></h2>
+<p>Probability as the basis for statistics and an intricate tool used for dealing with what we call non-deterministic events; that is, we do not know the outcome of an event before it occurs. Most mathematics deals with deterministic events, e.g. “If I have 5 apples and you take 1 away, I have 4 apples left.” Probability does not work the same way since I can roll a pair of dice several times and each roll can come out differently. It is often described as “being up to chance” what the outcome will
+be even though chance is not an actor that can be responsible for anything. What is responsible for different results? We do not know. In events where not everything is known, we rely on probability to help use decide what can happen. Because of this, it is essential to be certain of one’s interpretation of probability when approaching it, especially when looking to make decisions.</p>
+<p>Mathematicians have no need to create an interpretation for probability. They simply define a function <span class="math notranslate nohighlight">\(P(x)\)</span> and its properties and create theorems and proofs built on these functions. The everyday decision-maker is in a much different position where they are given problems and tools and left to find an optimal solution. The interpretation is needed to know how to apply these tools. So how can we use the tools of probability to make decisions?</p>
+<p>The two major schools of thought on probability are the subjective and frequentist approaches.</p>
+<ul>
+<li><p>Subjective probability</p>
+<p>In subjective probability, the value of a probability (which is greater than or equal to 0 and less than or equal to 1, or bounded on <span class="math notranslate nohighlight">\([0,1]\)</span>) represents the strength of our belief that a specific event will occur. Therefore, <span class="math notranslate nohighlight">\(P(A)=0\)</span> represents an absolute belief that event <span class="math notranslate nohighlight">\(A\)</span> <strong>will not</strong> occur and <span class="math notranslate nohighlight">\(P(A)=1\)</span> represents an absolute belief that event <span class="math notranslate nohighlight">\(A\)</span> <strong>will</strong> occur. In everyday conversation, this often extends to outcomes that have already happened but their
+outcome is still unobserved. This is somewhat reminiscent of Schrodinger’s cat. Physicist Erwin Schrodinger postulated that a cat put into a box rigged with a deadly trap, as long as the box was left alone and unobserved for a time, could be counted as both dead and alive. When the box was opened, the cat would become either dead or alive in the exact moment that its state was observed. Without getting into quantam mechanics (or animal rights), we will think of a passive observer in
+Schrodinger’s example. Logically, the observer knows that the cat is presently either alive or dead. However, in the moments leading up to the reveal of the cat’s state, the observer will have some belief about the cat’s state. If they think the cat has an equal chance of being alive or dead, then the cat would be considered 50 percent alive and 50 percent dead. In contrast, if the observer believes the cat is more likely to be alive than dead, then they could consider to the cat to be 75
+percent alive and 25 percent dead.</p>
+</li>
+<li><p>Frequentist probability</p>
+<p>The alternative approach to subjective probability is frequentist and it would consider the entire preceding paragraph as absurd. The frequentist believes that a cat can never be both alive and dead. Instead, the frequentist makes an assumption (a null hypothesis) which would likely be that the cat is alive since it entered alive, and they until they receive sufficient evidence to disprove their assumption, they will continue to believe that one thing. For decades, this is how hypotheses have
+been evaluated in the scientific community. Any hypothesis can be valid as long as researchers can produce results that are statistically significant. This leads to much confusion as other researchers produce contradictory results that are also statistically significant. The resulting chaos is difficult to resolve in part because when states of nature are boiled down to “statistically significant” and “not statistically significant” the results of the two studies become difficult to compare.
+The frequentist approach is also limited in its interpretability for isolated events. Frequentists interpret <span class="math notranslate nohighlight">\(P(A)\)</span> as the general frequency with which event <span class="math notranslate nohighlight">\(A\)</span> occurs when the situation is repeated a large number of times. This is a useless approach when trying to determine the outcome of an experiment that has never happened before; e.g., the outcome of an election or sports match, the next time a supervolcano will erupt on Earth, or the chance of a third World War starting in
+a certain year. Whereas a pair of dice we can reroll as many times as we like to find their roll frequency, these events are much too isolated and the experiments too different from each other to ever create an interpretation that would satisfy the frequentist ideology.</p>
+</li>
+</ul>
+<p>In this course, we will use the subjective approach, the same interpretation of probability as Lancaster (2004), since it is how we in everyday life and since it will enable us to calculate and interpret many useful things including expected values.</p>
+</section>
+<section id="Probability-Terms">
+<h2>Probability Terms<a class="headerlink" href="#Probability-Terms" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>sample space - the set of all possible outcomes and events from an experiment</p></li>
+<li><p>experiment - a situation with an outcome (or several) that is represented by a random variable; remember, in our interpretations the experiment can already have run to completion without us having observed an outcome</p></li>
+<li><p>random variable (rv) - a component in an experiment that takes on a value</p></li>
+<li><p>outcome - the state of our random variable at the end of an experiment, whether observed or not</p></li>
+<li><p>state - a deterministic value for a variable</p></li>
+<li><p>event - a set of outcomes for an experiment; e.g. <span class="math notranslate nohighlight">\(A\)</span> can be defined as rolling a pair of dice and obtaining an even number</p></li>
+</ul>
+</section>
+<section id="Random-Variables">
+<h2>Random Variables<a class="headerlink" href="#Random-Variables" title="Permalink to this headline">¶</a></h2>
+<p>Random variables are one of the building blocks of probability. Instead of blaming chance, we define a random variable which encapsulates all of the unknowns influencing a particular value in our experiment. The value of this random variable will change from experiment to experiment (if we have multiple experiments).</p>
+<p>Mathematically, rvs have certain properties.</p>
+<ol class="arabic simple">
+<li><p>rvs can either be discrete or continuous. Discrete means they can only take on certain values, often nonnegative whole numbers. Continuous means they can take on any value within a certain range such as <span class="math notranslate nohighlight">\((-\infty, \infty)\)</span> or <span class="math notranslate nohighlight">\([0, \infty)\)</span> or <span class="math notranslate nohighlight">\([0,1]\)</span>.</p></li>
+<li><p>Discrete rvs have a pmf or probability mass function which gives the relative probability/frequency of them taking on that value and it is written as <span class="math notranslate nohighlight">\(P(X=k) = f_X(k)\)</span>. Continuous rvs had a pdf or probability density function which also gives the relative probability/frequency of them taking on a specific value. It is written as <span class="math notranslate nohighlight">\(P(x&lt;X\leq dx) = f_X(x)\)</span>. Continuous rvs also have a cdf or cumulative distribution function. This gives the probability of <span class="math notranslate nohighlight">\(X\)</span> being less than or
+equal to a certain value. It is written as <span class="math notranslate nohighlight">\(P(X \leq x) = F_X(x)\)</span>. Below are some examples of these functions</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">binom</span><span class="p">,</span> <span class="n">norm</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">11</span><span class="p">),</span> <span class="n">binom</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">11</span><span class="p">),</span> <span class="mi">11</span><span class="p">,</span> <span class="mf">.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Probability Mass Function of a Binomial RV (Discrete)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Probability&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Value of Binomial RV&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/probability_6_0.png" src="_images/probability_6_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">11.</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">11.</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="mf">5.5</span><span class="p">,</span> <span class="mf">5.5</span><span class="o">/</span><span class="mf">3.</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Probability Density Function of a Normal RV (Continuous)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Probability&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Value of Normal RV&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/probability_7_0.png" src="_images/probability_7_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">11.</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">11.</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="mf">5.5</span><span class="p">,</span> <span class="mf">5.5</span><span class="o">/</span><span class="mf">3.</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Cumulative Distribution Function of a Normal RV&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Probability&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Value of Normal RV&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/probability_8_0.png" src="_images/probability_8_0.png" />
+</div>
+</div>
+<ol class="arabic" start="3">
+<li><p>Discrete rvs can have distributions (pmf’s) with irregular intervals between possible values, and continuous rvs can have distributions (pdf’s) that are not differentiable. Essentially, whatever distribution you can conceive, a rv can have. This allows rv’s to represent something as flexible as human beliefs.</p></li>
+<li><p>There are many predefined discrete and continuous probability distrbutions. Above are shown examples of binomial and gaussian/normal distributions. Often, probability distributions are suited to specific kinds of events. For instance, a binomial distribution represents the probability of observing a certain number of successes <span class="math notranslate nohighlight">\(k\)</span> in an experiment with <span class="math notranslate nohighlight">\(n\)</span> trials where each trial has a probability of success <span class="math notranslate nohighlight">\(p\)</span>. Thus, a rv <span class="math notranslate nohighlight">\(X\)</span> that has a binomial distribution has a
+pmf <span class="math notranslate nohighlight">\(f_X(k; n, p) = {n \choose k} \cdot k^p \cdot (n-k)^{1-p}\)</span>, or the probability of <span class="math notranslate nohighlight">\(X\)</span> being equal to <span class="math notranslate nohighlight">\(k\)</span>.</p>
+<p>The normal distribution is less interpretable but is often used to represent a variable that has an equal chance of being above or below its expected value by a certain distance. Just as the pmf of a binomial distribution is parametrized by <span class="math notranslate nohighlight">\(n\)</span> and <span class="math notranslate nohighlight">\(p\)</span>, a normal distribution is parametrized by <span class="math notranslate nohighlight">\(\mu\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> where <span class="math notranslate nohighlight">\(\mu\)</span> is the expected value of the variable and <span class="math notranslate nohighlight">\(\sigma\)</span> is proportional to the distance observed above or below the mean. A rv <span class="math notranslate nohighlight">\(Y\)</span>
+that is normally distributed has a pdf <span class="math notranslate nohighlight">\(f_Y(y; \mu, \sigma^2) = \frac{1}{\sigma\sqrt{2\pi}} \cdot \exp\left({\frac{(y-\mu)^2}{2\sigma^2}}\right)\)</span></p>
+<p>rvs with a parametrized distribution like this are often defined in the following manner. A binomial rv <span class="math notranslate nohighlight">\(X\)</span> is defined by <span class="math notranslate nohighlight">\(X \sim \text{Binom}(n, p)\)</span> and a normal rv <span class="math notranslate nohighlight">\(Y\)</span> is defined by <span class="math notranslate nohighlight">\(Y \sim N(\mu, \sigma^2)\)</span>. And remember these are just two distributions <a class="reference external" href="https://en.wikipedia.org/wiki/List_of_probability_distributions">out of many</a>.</p>
+</li>
+<li><p>Probability distributions can also be described in other ways. For example, numeric random variables all have expected values and variances, written as <span class="math notranslate nohighlight">\(E(X)\)</span> and <span class="math notranslate nohighlight">\(\text{Var}(X)\)</span>. The expected value can also be called the mean, or the average of all the values we would see if we conducted a large number of experiments. The variance is representative of how spread out the values between experiments should be. The square root of the variance is what we call standard deviation and is
+another measure for how much a random variable can vary. There are also other metrics such as skewness and kurtosis which we will not touch on in this course as they have little relevance, nor will we discuss how to calculate any values other than expected value. It suffices to know how to find a mean and that as variance (or standard deviation) increases, so will the distance between observations.</p></li>
+</ol>
+</section>
+<section id="Joint-Probability">
+<h2>Joint Probability<a class="headerlink" href="#Joint-Probability" title="Permalink to this headline">¶</a></h2>
+<section id="Independent-Variables">
+<h3>Independent Variables<a class="headerlink" href="#Independent-Variables" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="Bayes’-Rule">
+<h2>Bayes’ Rule<a class="headerlink" href="#Bayes’-Rule" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Joint probability (marginal probability, conditional probability)</p></li>
+<li><p>Independent variables</p></li>
+<li><p>Properties of pmf’s and pdf’s</p>
+<ul>
+<li><p>Expected value/mean</p></li>
+<li><p>Variance/standard deviation</p></li>
+</ul>
+</li>
+<li><p>Different probability distributions</p></li>
+<li><p>Bayes’ Rule</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Decision Theory</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Course Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elements.html">Elements of Decision Theory</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Landon Work.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/probability.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

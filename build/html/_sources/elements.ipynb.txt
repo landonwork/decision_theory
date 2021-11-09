@@ -1,0 +1,282 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# An Introduction to Decision Theory"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Imagine you have an electrical contractor who has to decide how to wire new houses. They have options of 15, 20, and 30-amp wire. The higher the capacity of the wire, the more expensive it is for them. However, should the family moving into the new house ever exceed the rating of the wire, it will cause burnouts and they will have to eat the cost of rewiring the house. It will also damage their relationship with their business partners to have families constantly complaining about their work."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Taking this information, they construct a table with the loss that their business would experience depending on their actions and the peak amperage of a particular family. Columns represent the set of actions available to the electrical contractor, $A$. Rows represent the set of possible states of nature that a particular family can have, $\\theta$.\n",
+    "\n",
+    "#### Table 1: Loss Given State of Nature and Action Taken\n",
+    "| | | Actions | |\n",
+    "|:-----------:|:------------:|:--:|:--:|\n",
+    "| States of Nature | 15-amp wire | 20-amp wire | 30-amp wire |\n",
+    "| 15-amp peak | 1 | 2 | 3 |\n",
+    "| 20-amp peak | 5 | 2 | 3 |\n",
+    "| 30-amp peak | 7 | 6 | 3 |"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "loss = np.array([\n",
+    "    [1, 2, 3],\n",
+    "    [5, 2, 3],\n",
+    "    [7, 6, 3]\n",
+    "])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "After deciding on the cost of each possible outcome, the contractor decides they can reduce the amount of risk they take on by giving families questionnaires. Suppose that the contractor asks each family to read the following question and check exactly one answer.\n",
+    "\n",
+    "*How much electricity would you say your family draws on average?*\n",
+    "* 10-amp _____\n",
+    "* 12-amp _____\n",
+    "* 15-amp _____\n",
+    "* 20-amp _____"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "After doing this for some time, the electrical contractor learns the approximate frequency of a family's answer depending on  their peak amperage.\n",
+    "\n",
+    "#### Table 2: Conditional Probability of Questionnaire Answers Given State of Nature\n",
+    "| | | Questionnaire Outcomes |  | |\n",
+    "|----|--------|--------|--------|--------|\n",
+    "| States of Nature | 10-amp answer | 12-amp answer | 15-amp answer | 20-amp answer\n",
+    "| 15-amp peak | 1/2 | 1/2 | 0 | 0 |\n",
+    "| 20-amp peak | 0 | 1/2 | 1/2 | 0 |\n",
+    "| 30-amp peak | 0 | 0 | 1/3 | 2/3 |\n",
+    "\n",
+    "Notice that each row is a conditional distribution that sums to 1,  the probability of a family answering a certain way given their state of nature."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# They call this the \"frequency of response table\"\n",
+    "x_given_theta = np.array([\n",
+    "    [1/2, 1/2, 0,   0],\n",
+    "    [0,   1/2, 1/2, 0],\n",
+    "    [0,   0,   1/3, 2/3]\n",
+    "]) # P(theta|x)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The electrical contractor now has a tool to acquire information so they can determine the best action given the result of the family's questionnaire. In other words, depending on family's answer, the contractor can make some statement about the expected peak consumption of the family and what they might expect to lose for any action they take. The contractor may select any action, but through experience and preference eventually they will likely settle on a specific *strategy*, a permutation of actions to perform according to the family's questionnaire result.\n",
+    "\n",
+    "In this case, there are 4 possible outcomes to the experiment and 4 possible actions to take for each outcome which leads to 16 total possible strategies. The set of strategies will be notated as $S$. These will be written as $s = (a_i, a_j, a_k, a_l)$. For example, $s_1 = (15,15,20,30)$ is notation for Strategy 1 which is:\n",
+    "* When the family responds with 10-amp average, wire the house with 15-amp wire\n",
+    "* When the family responds with 12-amp average, wire the house with 15-amp wire\n",
+    "* When the family responds with 15-amp average, wire the house with 20-amp wire\n",
+    "* When the family responds with 20-amp average, wire the house with 30-amp wire\n",
+    "\n",
+    "In contrast, $s_2 = (30,30,20,15)$ tells us that Strategy 2 is:\n",
+    "* When the family responds with 10-amp average, wire the house with 30-amp wire\n",
+    "* When the family responds with 12-amp average, wire the house with 30-amp wire\n",
+    "* When the family responds with 15-amp average, wire the house with 20-amp wire\n",
+    "* When the family responds with 20-amp average, wire the house with 15-amp wire\n",
+    "\n",
+    "We will also include a Strategy 3 $s_3 = (15,20,30,30)$ and leave the reader to interpret the notation as above."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "strat1 = np.array([0, 0, 1, 2]) # Strategy 1 where the values represent the index of the actions\n",
+    "strat2 = np.array([2, 2, 1, 0]) # Strategy 2 ...\n",
+    "strat3 = np.array([0, 1, 2, 2]) # Strategy 3 ..."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now we that we have rules for acting on results from an experiment, how should we decide which strategy is best?\n",
+    "\n",
+    "A start is to compute the average loss that the contractor faces from each state of nature for each of the strategies. For each state of nature and strategy, we find from Table 2 the probability of taking an action. For example, if the state of nature is a 20-amp peak and we apply Strategy 1, we will take the 15-amp wire action with 50 percent probability and we will take the 20-amp wire action with 50 percent probability (called action probabilities). To find the average loss, we find the loss of these two actions for the 20-amp state of nature from Table 1 (5 and 2). Then we multiply these losses by their respective probabilities (.5 and .5) and obtain one average loss (3.5).\n",
+    "\n",
+    "Doing this for each state of nature and strategy gives us Table 3:\n",
+    "\n",
+    "#### Table 3: Average Loss of Each Strategy Given State of Nature\n",
+    "| | | Strategies | |\n",
+    "|:---|:--:|:--:|:--:|\n",
+    "|States of Nature| Strategy 1 | Strategy 2 | Strategy 3 |\n",
+    "| 15-amp peak | 1 | 3 | 1.5 |\n",
+    "| 20-amp peak | 3.5 | 2.5 | 2.5 |\n",
+    "| 30-amp peak | 4 | 6.67 | 3 |"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[1.        , 3.        , 1.5       ],\n",
+       "       [3.5       , 2.5       , 2.5       ],\n",
+       "       [4.        , 6.66666667, 3.        ]])"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "avg_losses = []\n",
+    "strats = [strat1, strat2, strat3]\n",
+    "for strat in strats:\n",
+    "    avg_loss = (x_given_theta * loss[:,strat]).sum(axis=1)\n",
+    "    avg_losses.append(avg_loss)\n",
+    "avg_losses = np.array(avg_losses).T\n",
+    "avg_losses"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Very quickly, we can see that Strategy 2 generates as much or more loss for the contractor than Strategy 3 no matter the state of nature. Therefore, we can say that \"$s_3$ dominates $s_2$\" and discard it. Now let's compare Strategies 1 and 3."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Table 3a: Average Loss of Strategies 1 and 3\n",
+    "| | Strategies | |\n",
+    "|:---|:--:|:--:|\n",
+    "|States of Nature| Strategy 1 | Strategy 3 |\n",
+    "| 15-amp peak | 1 | 1.5 |\n",
+    "| 20-amp peak | 3.5 | 2.5 |\n",
+    "| 30-amp peak | 4 | 3 |"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "How can we choose between these? This question is rather difficult if the contractor does not know what frequency or percentage of their customers is. Are they all 15-amp peak families? Are 20 or 30 percent of the families 30-amp families? Supposing the three states of nature are equally likely to occur, then the calculations for the average of average losses (what we will call expected loss) for a strategy look like this:\n",
+    "\n",
+    "$$E_{loss}(s_1) = 1 \\cdot 1/3 + 3.5 \\cdot 1/3 + 4 \\cdot 1/3 = 2.83$$\n",
+    "$$E_{loss}(s_3) = 1.5 \\cdot 1/3 + 2.5 \\cdot 1/3 + 3 \\cdot 1/3 = 2.33 $$\n",
+    "\n",
+    "so that the expected loss for Strategy 1 is more than the expected loss of Strategy 2. However, if the contractor knew that in their community 90 percent of families were 15-amp families and 10 percent were 20-amp families, the calculations would look like this:\n",
+    "\n",
+    "$$E_{loss}(s_1) = 1 \\cdot .9 + 3.5 \\cdot .1 = 1.25$$\n",
+    "$$E_{loss}(s_3) = 1.5 \\cdot .9 + 2.5 \\cdot .1 = 1.60 $$\n",
+    "\n",
+    "and Strategy 1 would be much more attractive as a result."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Strategy 1 Expected Loss:  2.83\n",
+      "Strategy 3 Expected Loss:  2.33\n"
+     ]
+    }
+   ],
+   "source": [
+    "freqs1 = np.array([1/3, 1/3, 1/3])\n",
+    "print(f\"Strategy 1 Expected Loss: {(avg_losses[:,0] * freqs1).sum() : .2f}\")\n",
+    "print(f\"Strategy 3 Expected Loss: {(avg_losses[:,2] * freqs1).sum() : .2f}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Strategy 1 Expected Loss:  1.25\n",
+      "Strategy 3 Expected Loss:  1.60\n"
+     ]
+    }
+   ],
+   "source": [
+    "freqs2 = np.array([.9, .1, 0])\n",
+    "print(f\"Strategy 1 Expected Loss: {(avg_losses[:,0] * freqs2).sum() : .2f}\")\n",
+    "print(f\"Strategy 3 Expected Loss: {(avg_losses[:,2] * freqs2).sum() : .2f}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Thus, the strategy that the contractor ends up selecting may depend on the frequency of their customers' states of nature. Another way that the contractor might select a strategy is with the minmax method. Essentially, the idea is to minimize the greatest possible loss. In this case, the greatest average loss for Strategy 1 is 4 and the greatest average loss for Strategy 3 is 3. To minimize the greatest loss, the contractor would select Strategy 3."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
