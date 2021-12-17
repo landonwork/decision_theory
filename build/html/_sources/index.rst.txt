@@ -14,6 +14,14 @@ Welcome to Decision Theory's documentation!
    Elements of Decision Theory <elements>
    Basic Probability <probability>
    Basic Statistics <statistics>
+   Bayes' Rule <bayes>
+   Bayes' Rule Discrete Example <covid_bayes>
+   Bayes' and Thompson Sampling <bayes_ts>
+   Flexible Thompson Sampling <particle_ts>
+   Adding Drift to a Particle Filter <particle_drift>
+   Introduction to Markov Chains <mcmc>
+   Introduction to PyMC3 <pymc3>
+   
 
 Indices and tables
 ==================

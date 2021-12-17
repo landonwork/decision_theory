@@ -1,0 +1,560 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Using Bayes’ Rule in Real Life &#8212; Decision Theory 12/05/2021 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Bayes’ Rule" href="bayes_ts.html" />
+    <link rel="prev" title="Bayesian Inference" href="bayes.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Using-Bayes’-Rule-in-Real-Life">
+<h1>Using Bayes’ Rule in Real Life<a class="headerlink" href="#Using-Bayes’-Rule-in-Real-Life" title="Permalink to this headline">¶</a></h1>
+<p><strong>Simplified Bayes’ Rule</strong></p>
+<div class="math notranslate nohighlight">
+\[P(A|B) \propto P(B|A) \cdot P(A)\]</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+<p>Let’s say that I want to know if I have COVID. The tests do not actually tell us if we COVID or not. These tests have sensitivities and specificities which are conditional probabilities. Because we use these to update our beliefs, we call them likelihoods. The most accepted COVID tests have a specificity &gt;97% and a sensitivity &gt;80%. (I’ll put a link here.)</p>
+<p>We are going to go through a real-life example involving an individual named Alex and COVID tests. The events where Alex is or is not infected by COVID-19 will be denoted as <span class="math notranslate nohighlight">\(COVID+\)</span> and <span class="math notranslate nohighlight">\(COVID-\)</span>, respectively. The events where Alex tests positive or negative for COVID will be denoted as <span class="math notranslate nohighlight">\(TEST+\)</span> and <span class="math notranslate nohighlight">\(TEST-\)</span>, respectively. Specificity and sensitivity represent the true negative rate and true positive rate, respectively. This means specificity = <span class="math notranslate nohighlight">\(P(TEST-|COVID-)\)</span> and
+sensitivity = <span class="math notranslate nohighlight">\(P(TEST+|COVID+)\)</span>. In other words, specificity is the chance of receiving a negative result if the true state of nature is negative, and sensitivity is the chance of receiving a positive result if the true state of nature is positive.</p>
+<section id="What-is-our-prior-belief?">
+<h2>What is our prior belief?<a class="headerlink" href="#What-is-our-prior-belief?" title="Permalink to this headline">¶</a></h2>
+<p>Let’s say that Alex was exposed to COVID yesterday and their friend started displaying symptoms today. Upon hearing this from their friend, Alex will automatically begin forming a prior belief about how likely it was they contracted COVID from their friend. This will depend on their proximity to each other the day before, the length of exposure, immunizations, and trust in their immune system and information about COVID-19. For simplicity, let’s say that after considering these factors, Alex
+believes he has about 50/50 chance of having contracted COVID and decides that is enough to get tested.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">prior</span> <span class="o">=</span> <span class="mf">.5</span> <span class="c1"># Prior belief of having contracted COVID-19</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="What-is-our-likelihood?">
+<h2>What is our likelihood?<a class="headerlink" href="#What-is-our-likelihood?" title="Permalink to this headline">¶</a></h2>
+<p>Alex gets a PCR test done which will have the specificity and sensitivity defined before. These will become part of Bayes’ formula as soon as Alex receives a test result. Let us investigate the more likely case, where Alex’s test result is negative.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">sens</span> <span class="o">=</span> <span class="mf">.8</span>
+<span class="n">spec</span> <span class="o">=</span> <span class="mf">.97</span>
+</pre></div>
+</div>
+</div>
+<p>Using the sensitivity and specifity, we can build a table that represents the joint probability mass function of these two events. Because both random variables are discrete, we will have a 2x2 table. We will put the true states of nature in the columns and the test results in the rows. We can find the probability of each combination of events happening like so:</p>
+<div class="math notranslate nohighlight">
+\[P(\text{TEST- &amp; COVID-}) = P(COVID-) \cdot P(TEST-|COVID-)\]</div>
+<div class="math notranslate nohighlight">
+\[P(\text{TEST+ &amp; COVID-}) = P(COVID-) \cdot P(TEST+|COVID-)\]</div>
+<div class="math notranslate nohighlight">
+\[P(\text{TEST- &amp; COVID+}) = P(COVID+) \cdot P(TEST-|COVID+)\]</div>
+<div class="math notranslate nohighlight">
+\[P(\text{TEST+ &amp; COVID+}) = P(COVID+) \cdot P(TEST+|COVID+)\]</div>
+<p>Percent chance of true negatives and true positives are located in the top-left and bottom-right positions, respectively.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">table</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">prior</span><span class="p">)</span> <span class="o">*</span> <span class="n">spec</span>
+<span class="n">table</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">prior</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">spec</span><span class="p">)</span>
+<span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">prior</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">sens</span><span class="p">)</span>
+<span class="n">table</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">prior</span> <span class="o">*</span> <span class="n">sens</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;TEST-&#39;</span><span class="p">,</span> <span class="s1">&#39;TEST+&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;COVID-&#39;</span><span class="p">,</span> <span class="s1">&#39;COVID+&#39;</span><span class="p">])</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>COVID-</th>
+      <th>COVID+</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>TEST-</th>
+      <td>0.485</td>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>TEST+</th>
+      <td>0.015</td>
+      <td>0.4</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="What-is-the-posterior?">
+<h2>What is the posterior?<a class="headerlink" href="#What-is-the-posterior?" title="Permalink to this headline">¶</a></h2>
+<p>Now that we can see the probability of each combination of events and we know that Alex’s test came back negative, we only need to consider the probabilities in the first row. Then the probabilities .485 and .1 become .83 and .17 so that they sum to 1. And after receiving this one test, Alex can conclude that they have only a .17, or 17 percent, chance of having contracted COVID-19.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="mf">.485</span>  <span class="o">/</span> <span class="p">(</span><span class="mf">.485</span> <span class="o">+</span> <span class="mf">.1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="mf">.1</span>  <span class="o">/</span> <span class="p">(</span><span class="mf">.485</span> <span class="o">+</span> <span class="mf">.1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.8290598290598291
+0.17094017094017097
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">posterior</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">posterior</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.17094017094017092
+</pre></div></div>
+</div>
+</section>
+<section id="What-to-do-with-Bayes’-Rule?">
+<h2>What to do with Bayes’ Rule?<a class="headerlink" href="#What-to-do-with-Bayes’-Rule?" title="Permalink to this headline">¶</a></h2>
+<p>Using this example, any individual might be able to decide whether it is safe to visit relatives or whether they should social distance or even quarantine. However, for a business owner with employees, it would enable them to decide whether it is too risky to allow a sick employee come in to work. In addition, the business owner should keep in mind the effectiveness of a test, namely the specificity and sensitivity and also consider selecting tests that favor one over the other. In this example,
+for instance, the tests have a higher specificity so that Alex’s chances of receiving a false positive on the test are close to 0 (0.015), but some employers might prefer more sensitive tests (and less specific) so that false positives are more common. The costs of false positives versus false negatives (and even probabilities of each event) will depend on the individual’s utility function and sometimes decision makers have control over which attributes they get to see in a test or experiment.
+We will discuss this in the next section.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Decision Theory</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Course Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elements.html">Elements of Decision Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="probability.html">Basic Probability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="statistics.html">Basic Statistics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bayes.html">Bayes' Rule</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Bayes' Rule Discrete Example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#What-is-our-prior-belief?">What is our prior belief?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#What-is-our-likelihood?">What is our likelihood?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#What-is-the-posterior?">What is the posterior?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#What-to-do-with-Bayes’-Rule?">What to do with Bayes’ Rule?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bayes_ts.html">Bayes' and Thompson Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particle_ts.html">Flexible Thompson Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particle_drift.html">Adding Drift to a Particle Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcmc.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcmc.html#MCMC">MCMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pymc3.html">Introduction to PyMC3</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="bayes.html" title="previous chapter">Bayesian Inference</a></li>
+      <li>Next: <a href="bayes_ts.html" title="next chapter">Bayes’ Rule</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Landon Work.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/covid_bayes.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,702 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Bayes’ Rule &#8212; Decision Theory 12/05/2021 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Particle Filters" href="particle_ts.html" />
+    <link rel="prev" title="Using Bayes’ Rule in Real Life" href="covid_bayes.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Bayes’-Rule">
+<h1>Bayes’ Rule<a class="headerlink" href="#Bayes’-Rule" title="Permalink to this headline">¶</a></h1>
+<div class="math notranslate nohighlight">
+\[P(A|B) = \frac{P(B|A)\cdot P(A)}{P(B)}\]</div>
+<div class="math notranslate nohighlight">
+\[\text{Posterior} = \frac{\text{Likelihood } \cdot \text{ Prior}}{\text{Evidence}}\]</div>
+<section id="Back-to-the-COVID-example">
+<h2>Back to the COVID example<a class="headerlink" href="#Back-to-the-COVID-example" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we have a prior belief about our chances of having COVID, <span class="math notranslate nohighlight">\(COVID^+\)</span>. We also know the sensitivity and specificity of the test we are taking, .8 and 1.0 respectively. These represent our true positive and true negative rate and will be crucial in helping us identify our posterior. To make Bayes’ Rule applicable to our situation, let’s change some of the symbols. Let <span class="math notranslate nohighlight">\(x\)</span> represent the result we get on our test, either <span class="math notranslate nohighlight">\(+\)</span> or <span class="math notranslate nohighlight">\(-\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[P(COVID^+|x) = \frac{P(x|COVID^+) \cdot P(COVID^+)}{P(x)}\]</div>
+<p>Now we have an equation that will help us to find our posterior no matter the value we observe for <span class="math notranslate nohighlight">\(x\)</span>, but before we can use it, we still have to determine the value for the likelihood function and the evidence. This is where we go back to the sensitivity and specificity of the test, and we can find all the probabilities <span class="math notranslate nohighlight">\(P(x|COVID)\)</span> by assuming for a moment that we either have COVID-19 or that we don’t have COVID-19.</p>
+<p>Assuming we do have COVID, <span class="math notranslate nohighlight">\(P(x|COVID^+)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\text{True Positive Rate: }P(+|COVID^+) = 0.8 \text{  Sensitivity/Precision}\]</div>
+<div class="math notranslate nohighlight">
+\[\text{False Negative Rate: }P(-|COVID^+) = 0.2\]</div>
+<p>Assuming we do not have COVID, <span class="math notranslate nohighlight">\(P(x|COVID^-)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\text{False Positive Rate: }P(+|COVID^-) = 0.0\]</div>
+<div class="math notranslate nohighlight">
+\[\text{True Negative Rate: }P(-|COVID^-) = 1.0 \text{  Specificity/Recall}\]</div>
+<p>Now we almost have everything we need to start. The last thing is the probability of <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(P(x)\)</span>. Because we don’t know if we have COVID or not, <span class="math notranslate nohighlight">\(P(x)\)</span> actually depends on our prior. It is either <span class="math notranslate nohighlight">\(P(x|COVID^+)\)</span> or <span class="math notranslate nohighlight">\(P(x|COVID^-)\)</span>, so we estimate the probability in this situation (which is easily done, luckily, because it is a binary situation) by multiplying these two probabilities by our priors.</p>
+<div class="math notranslate nohighlight">
+\[P(x) = P(x|COVID^+) \cdot P(COVID^+) + P(x|COVID^-) \cdot P(COVID^-)\]</div>
+<section id="Now-we-can-finish-our-example.">
+<h3>Now we can finish our example.<a class="headerlink" href="#Now-we-can-finish-our-example." title="Permalink to this headline">¶</a></h3>
+<p>This time around we will assume that our true state of nature is <span class="math notranslate nohighlight">\(COVID^-\)</span>. This is nicer for us because there are no false positives in this situation. If we were <span class="math notranslate nohighlight">\(COVID^+\)</span>, then once we got a positive test result, there would be no more uncertainty. For us (the authors), it will be nice for us to see how the uncertainty of our hypothetical selves will decay.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Define our priors and conditional probabilities</span>
+<span class="c1"># We have to assume that our state of nature is COVID-</span>
+<span class="n">prior</span> <span class="o">=</span> <span class="mf">.5</span>
+<span class="n">posCpos</span> <span class="o">=</span> <span class="mf">.8</span>
+<span class="n">negCpos</span> <span class="o">=</span> <span class="mf">.2</span>
+<span class="n">posCneg</span> <span class="o">=</span> <span class="mf">.0</span>
+<span class="n">negCneg</span> <span class="o">=</span> <span class="mf">1.</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">posteriors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">posteriors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prior</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># A negative test result; in other situations, this might be a random variable</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># chance of a negative result given a positive state * chance of a positive state + chance of a negative result ...</span>
+        <span class="n">px</span> <span class="o">=</span> <span class="n">negCpos</span> <span class="o">*</span> <span class="n">prior</span> <span class="o">+</span> <span class="n">negCneg</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">prior</span><span class="p">)</span>
+        <span class="c1"># posterior = likelihood * prior / evidence</span>
+        <span class="n">prior</span> <span class="o">=</span> <span class="n">negCpos</span> <span class="o">*</span> <span class="n">prior</span> <span class="o">/</span> <span class="n">px</span>
+    <span class="k">elif</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># If a positive test result</span>
+        <span class="c1"># chance of a positive result given a positive state * chance of a positive state + chance of a positive result ...</span>
+        <span class="n">px</span> <span class="o">=</span> <span class="n">posCpos</span> <span class="o">*</span> <span class="n">prior</span> <span class="o">+</span> <span class="n">posCneg</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">prior</span><span class="p">)</span>
+        <span class="c1"># posterior = likelihood * prior / evidence</span>
+        <span class="n">prior</span> <span class="o">=</span> <span class="n">posCpos</span> <span class="o">*</span> <span class="n">prior</span> <span class="o">/</span> <span class="n">px</span>
+    <span class="n">posteriors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prior</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">posteriors</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[0.5,
+ 0.16666666666666669,
+ 0.03846153846153847,
+ 0.00793650793650794,
+ 0.0015974440894568696,
+ 0.0003198976327575177,
+ 6.399590426212724e-05,
+ 1.2799836162097128e-05,
+ 2.559993446416778e-06,
+ 5.119997378561345e-07,
+ 1.0239998951424113e-07]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">posteriors</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/bayes_ts_10_0.png" src="_images/bayes_ts_10_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="Thompson-Sampling">
+<h2>Thompson Sampling<a class="headerlink" href="#Thompson-Sampling" title="Permalink to this headline">¶</a></h2>
+<p>For Thompson Sampling, we have to be able to apply this to continuous distributions instead of just binary problems. And just to make it easier on ourselves, we will modify Bayes’ Rule to be a proportion instead of an equality.</p>
+<div class="math notranslate nohighlight">
+\[\text{Posterior } \propto \text{ Likelihood } \cdot \text{ Prior}\]</div>
+<p>We can do this because our evidence <span class="math notranslate nohighlight">\(P(x)\)</span> is a constant.</p>
+<p>For this topic, we will also be modeling a Multi-Armed Bandit problem. Herbert Robbins and others intellectualized the problem of playing slot machines. Some have different probabilities of paying out and different amounts that pay out when you win. How do you discover most quickly which slot machine is best to play on?</p>
+<p>So let’s play on some slot machines. We will be simulating a Multi-Armed Bandit problem using a Bernoulli Thompson Sampler. Beta distributions are parameterized by <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> and their probability density function is <span class="math notranslate nohighlight">\(f(\mu; \alpha, \beta) \propto \mu^{\alpha-1} \cdot (1-\mu)^{\beta-1}\)</span> Betas are super easy to update when we are using a binomial likelihood function (only two outcomes - success and failure). It looks like this:
+<span class="math notranslate nohighlight">\(L(\mu) = \mu^y \cdot (1-\mu)^{n-y}\)</span>. Put them together and our posterior becomes:</p>
+<p><span class="math">\begin{align}
+f(\mu;\alpha,\beta|x) &\propto (\mu^x \cdot (1-\mu)^{1-x}) \cdot \mu^{\alpha-1} \cdot (1-\mu)^{\beta-1} \\
+f(\mu;\alpha,\beta|x) &\propto \mu^{\alpha-1+x} \cdot (1-\mu)^{\beta-x} \\
+f(\mu;\alpha,\beta|x) &\propto f(\mu;\alpha+x,\beta+1-x)
+\end{align}</span></p>
+<p>In short, if we have a success (a payout), we add one to <span class="math notranslate nohighlight">\(\alpha\)</span>. If we have a failure (the machine “robs” us of our money), we add one to <span class="math notranslate nohighlight">\(\beta\)</span>.</p>
+<p>Let’s say in this case that we have two slot machines. Machine 1 pays out \$40 when we win. Machine 2 pays out \<span class="math notranslate nohighlight">\(60 when we win. However, we do not know the average frequencies (\)</span><span class="math">\mu</span>_1, <span class="math">\mu</span>_2$) with which they pay out. We are left to guess (to form our priors) at what these frequencies might be.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">beta</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Multi-Armed Prior&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Probability Density Function&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Average Frequency&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Machine 1&#39;</span><span class="p">,</span><span class="s1">&#39;Machine 2&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/bayes_ts_16_0.png" src="_images/bayes_ts_16_0.png" />
+</div>
+</div>
+<p>The priors used here are beta priors which (when using a binomial likelihood function as in this one) have really simple rules for updating (finding the posterior). Notice that these priors indicate we believe that Machine 1 (which pays less) pays out more frequently than Machine 2. This is to represent the possibility of believing the casino has made the average payout per game roughly equal throughout the establishment. (But really I just wanted to show the shape of two different beta
+distributions.)</p>
+<p>The dilemma presented here is that we want to explore the possibility that one of these machines pays out more than the other on average, but we also do not want to rule one or the other out too quickly. This is called the explore-exploit dilemma. Thompson Sampling is an incredibly effective and quick method of learning the optimal strategies in a static environment. (Also note that there are ways to add the uncertainty of random walk drift to this problem which I know you would be interested
+in, Matt.)</p>
+<p>To perform a Thompson Sampling, we simply have to pick randomly from our priors two average frequencies, one from each prior. Let’s say we sample our priors (using a random number generator) and get .8 for Machine 1 and .2 for Machine 2. We always want to play the slot machine that we guess gives us the most payout so we’ll multiply these average frequencies by the size of the payout and get \$32 for Machine 1 and \$12 for Machine 2 and we will pull Machine 1’s lever.</p>
+<p>Though this may be the more likely outcome, it does not eliminate the possibility of sampling, say, a .6 frequency for Machine 1 and a .5 frequency for Machine 2. In this case, we estimate an average payout of \$24 for Machine 1 and \$30 for Machine 2. In this somewhat more rare case, we will still play Machine 2. The beauty of Thompson Sampling is that we essentially leave all of the exploitation up to chance and simply update the probability distributions that we draw from.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">payout1</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">payout2</span> <span class="o">=</span> <span class="mi">60</span>
+<span class="n">beta1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">beta2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+
+<span class="n">machine1</span> <span class="o">=</span> <span class="mf">.5</span>
+<span class="n">machine2</span> <span class="o">=</span> <span class="mf">.3</span>
+
+<span class="n">pulls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">payouts</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">mu1</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="o">*</span><span class="n">beta1</span><span class="p">)</span>
+    <span class="n">mu2</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="o">*</span><span class="n">beta2</span><span class="p">)</span>
+    <span class="n">e1</span> <span class="o">=</span> <span class="n">mu1</span><span class="o">*</span><span class="n">payout1</span>
+    <span class="n">e2</span> <span class="o">=</span> <span class="n">mu2</span><span class="o">*</span><span class="n">payout2</span>
+    <span class="k">if</span> <span class="n">e1</span> <span class="o">&gt;</span> <span class="n">e2</span><span class="p">:</span>
+        <span class="c1"># Play Machine 1</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="n">machine1</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">machine1</span><span class="p">])</span>
+        <span class="n">payout</span> <span class="o">=</span> <span class="n">payout1</span><span class="o">*</span><span class="n">success</span>
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">beta1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">beta1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">pulls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Play Machine 2</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="n">machine2</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="n">machine2</span><span class="p">])</span>
+        <span class="n">payout</span> <span class="o">=</span> <span class="n">payout2</span><span class="o">*</span><span class="n">success</span>
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">beta2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">beta2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">pulls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">payouts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">payout</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">beta1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[39, 43]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">beta2</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[6, 24]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="o">*</span><span class="n">beta1</span><span class="p">)</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="n">beta</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="o">*</span><span class="n">beta2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Multi-Armed Posterior - 100 Pulls&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Probability Density Function&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Average Frequency&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Machine 1&#39;</span><span class="p">,</span><span class="s1">&#39;Machine 2&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/bayes_ts_24_0.png" src="_images/bayes_ts_24_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pulls</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Simulation Pulls&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/bayes_ts_26_0.png" src="_images/bayes_ts_26_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">payouts</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Simulation Payouts&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/bayes_ts_27_0.png" src="_images/bayes_ts_27_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Decision Theory</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Course Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elements.html">Elements of Decision Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="probability.html">Basic Probability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="statistics.html">Basic Statistics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bayes.html">Bayes' Rule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covid_bayes.html">Bayes' Rule Discrete Example</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Bayes' and Thompson Sampling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Back-to-the-COVID-example">Back to the COVID example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Thompson-Sampling">Thompson Sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="particle_ts.html">Flexible Thompson Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particle_drift.html">Adding Drift to a Particle Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcmc.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcmc.html#MCMC">MCMC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pymc3.html">Introduction to PyMC3</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="covid_bayes.html" title="previous chapter">Using Bayes’ Rule in Real Life</a></li>
+      <li>Next: <a href="particle_ts.html" title="next chapter">Particle Filters</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Landon Work.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/bayes_ts.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
