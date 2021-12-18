@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Setup &#8212; Decision Theory 12/05/2021 documentation</title>
+    <title>Markov Chain Monte Carlo &#8212; Decision Theory 12/05/2021 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -284,8 +284,12 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
+<section id="Markov-Chain-Monte-Carlo">
+<h1>Markov Chain Monte Carlo<a class="headerlink" href="#Markov-Chain-Monte-Carlo" title="Permalink to this headline">¶</a></h1>
+<p>Markov Chain Monte Carlo (MCMC) is a method of sampling from a probability distribution. Their purpose is to approximate a probability distribution and it is supposed that they can approximate any probability distribution. This notebook will use MCMC to to approximate the distribution for the best line of fit with 3 points. For simplicity and visualization, the intercept of the line will remain 0, so perhaps it would be more appropriate to say we are modelling the best <em>slope</em> of fit. In any
+case, the example will work like this.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -295,9 +299,10 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Setup">
-<h1>Setup<a class="headerlink" href="#Setup" title="Permalink to this headline">¶</a></h1>
+<h2>Setup<a class="headerlink" href="#Setup" title="Permalink to this headline">¶</a></h2>
+<p>We have 3 data points defined as <code class="docutils literal notranslate"><span class="pre">pts</span></code> below. We are quite confident after plotting them that the slope of best fit lies somewhere between 0 and 2. Linear models are often evaluated based on the <span class="math notranslate nohighlight">\(R^2\)</span> or sum of residual squares (SSR).</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -308,7 +313,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -323,12 +328,12 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_3_0.png" src="_images/mcmc_3_0.png" />
+<img alt="_images/mcmc_4_0.png" src="_images/mcmc_4_0.png" />
 </div>
 </div>
 <p>Instead of y = mx + b, we just use y = mx, so that we can visualize R2 and SSR as slope changes</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -338,7 +343,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -347,7 +352,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -356,7 +361,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -364,8 +369,9 @@ div.rendered_html tbody tr:hover {
 6
 </pre></div></div>
 </div>
+<p>Below is a line plot charting the reciprocal of SSR (<span class="math notranslate nohighlight">\(\frac{1}{SSR}\)</span>) against different slopes and we can see a peak around a slope of 0.5. Where SSR is lowest, <span class="math notranslate nohighlight">\(\frac{1}{SSR}\)</span> is highest. The point of this plot is to demonstrate that MCMC does not have to be used strictly with probability distribution, but also with any kind of scoring function. Essentially, we will be using MCMC to sample a distribution that is proportional to the “distribution” that we see in the plot.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -374,7 +380,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -383,12 +389,13 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">slope</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">ssr</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">vlines</span><span class="p">([</span><span class="o">-</span><span class="mf">.5</span><span class="p">,</span><span class="o">-</span><span class="mf">.25</span><span class="p">],</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Our &#39;Distribution&#39;&quot;</span><span class="p">)</span>
+<span class="c1"># plt.vlines([-.5,-.25], ymin=0, ymax=.3)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -397,18 +404,33 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_10_0.png" src="_images/mcmc_10_0.png" />
+<img alt="_images/mcmc_12_0.png" src="_images/mcmc_12_0.png" />
 </div>
 </div>
 </section>
 <section id="MCMC">
-<h1>MCMC<a class="headerlink" href="#MCMC" title="Permalink to this headline">¶</a></h1>
+<h2>MCMC<a class="headerlink" href="#MCMC" title="Permalink to this headline">¶</a></h2>
+<p>MCMC works by chaining together steps. Each step works like this:</p>
+<ol class="arabic simple">
+<li><p>The model has some value (or vector) for the parameter(s)</p></li>
+<li><p>The model obtains some score for these parameters</p></li>
+<li><p>The model parameters are then changed by a random amount in a random direction (this is called sampling)</p></li>
+<li><p>Three things can happen:</p>
+<ol class="arabic simple">
+<li><p>The model can obtain a higher score based on the new parameters. In this case, the model instantly accepts these new parameters and adds a new “link” to the chain with the values of the parameters.</p></li>
+<li><p>The model can obtain a lower score based on the new parameters. A randomly generated number may <strong>reject</strong> the new (worse) parameters.</p></li>
+<li><p>The model can obtain a lower score based on the new parameters. A randomly generated number may <strong>accept</strong> to accept the new (worse) parameters.</p></li>
+</ol>
+</li>
+<li><p>Steps 4 and 5 are repeated until there are sufficient links in the Markov chain</p></li>
+</ol>
+<p>At every step where the new score is less then old score, a random number is generated such that the probability of keeping the new parameters is proportional to the ratio of the lower score over the higher score. Otherwise, the new parameters are accepted immediately. This way, the Markov chain tends toward optimal parameter values and the chain “converges”, not to one value, but to one distribution that can be visualized.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">slope</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+<span></span><span class="n">slope</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">slope_history</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
 <span class="n">slope_history</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">slope</span>
 
@@ -425,7 +447,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -452,7 +474,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -461,16 +483,16 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(0.4673762111582019, 0.5326237888417982)
+(0.7597993976531564, 0.2402006023468436)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -479,16 +501,16 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-9.492098034140728
+5.878467082737986
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -497,23 +519,23 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x18d7ea7bd60&gt;]
+[&lt;matplotlib.lines.Line2D at 0x7fcc7b180a90&gt;]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_16_1.png" src="_images/mcmc_16_1.png" />
+<img alt="_images/mcmc_18_1.png" src="_images/mcmc_18_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -526,11 +548,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_17_0.png" src="_images/mcmc_17_0.png" />
+<img alt="_images/mcmc_19_0.png" src="_images/mcmc_19_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -539,18 +561,20 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.3184463044546511
+0.4531158903239566
 </pre></div></div>
 </div>
+</section>
 <section id="PyMC3">
 <h2>PyMC3<a class="headerlink" href="#PyMC3" title="Permalink to this headline">¶</a></h2>
+<p>PyMC3 is an API for MCMC that makes defining a model and sampling a posterior easy and straightforward. By defining random variables and their relationships, PyMC3 is able to easily combine and transform distributions by using the log-probabilities as the scoring function. Then after providing observed data, PyMC3 generates a Markov chain which can easily be plotted and analyzed. Below is an example of our best slope-of-fit using PyMC3.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -558,11 +582,11 @@ div.rendered_html tbody tr:hover {
 
 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">pts</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
 <span class="k">with</span> <span class="n">pm</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span> <span class="k">as</span> <span class="n">linear_model</span><span class="p">:</span>
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;weights&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">noise</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Gamma</span><span class="p">(</span><span class="s2">&quot;noise&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">y_observed</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span>
         <span class="s2">&quot;y_observed&quot;</span><span class="p">,</span>
-        <span class="n">mu</span><span class="o">=</span><span class="n">X</span> <span class="o">@</span> <span class="n">weights</span><span class="p">,</span>
+        <span class="n">mu</span><span class="o">=</span><span class="n">X</span> <span class="o">@</span> <span class="n">weight</span><span class="p">,</span>
         <span class="n">sigma</span><span class="o">=</span><span class="n">noise</span><span class="p">,</span>
         <span class="n">observed</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
     <span class="p">)</span>
@@ -578,15 +602,46 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-&lt;ipython-input-21-a1eb94324337&gt;:15: FutureWarning: In v4.0, pm.sample will return an `arviz.InferenceData` object instead of a `MultiTrace` by default. You can pass return_inferencedata=True or return_inferencedata=False to be safe and silence this warning.
+/tmp/ipykernel_16225/3189802570.py:15: FutureWarning: In v4.0, pm.sample will return an `arviz.InferenceData` object instead of a `MultiTrace` by default. You can pass return_inferencedata=True or return_inferencedata=False to be safe and silence this warning.
   posterior = pm.sample()
 Auto-assigning NUTS sampler...
 Initializing NUTS using jitter+adapt_diag...
-Multiprocess sampling (2 chains in 2 jobs)
-NUTS: [noise, weights]
+Multiprocess sampling (4 chains in 4 jobs)
+NUTS: [noise, weight]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+    <style>
+        /* Turns off some styling */
+        progress {
+            /* gets rid of default border in Firefox and Opera. */
+            border: none;
+            /* Needs to be in here for Safari polyfill so background images work as expected. */
+            background-size: auto;
+        }
+        .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+            background: #F44336;
+        }
+    </style>
+  <progress value='8000' class='' max='8000' style='width:300px; height:20px; vertical-align: middle;'></progress>
+  100.00% [8000/8000 00:01<00:00 Sampling 4 chains, 2 divergences]
+</div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+Sampling 4 chains for 1_000 tune and 1_000 draw iterations (4_000 + 4_000 draws total) took 1 seconds.
+There was 1 divergence after tuning. Increase `target_accept` or reparameterize.
+There was 1 divergence after tuning. Increase `target_accept` or reparameterize.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area rendered_html docutils container">
@@ -604,272 +659,161 @@ NUTS: [noise, weights]
         }
     </style>
   <progress value='4000' class='' max='4000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-  100.00% [4000/4000 00:06<00:00 Sampling 2 chains, 3 divergences]
-</div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-Sampling 2 chains for 1_000 tune and 1_000 draw iterations (2_000 + 2_000 draws total) took 24 seconds.
-There were 3 divergences after tuning. Increase `target_accept` or reparameterize.
-The acceptance probability does not match the target. It is 0.7133518846410769, but should be close to 0.8. Try to increase the number of tuning steps.
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-    <style>
-        /* Turns off some styling */
-        progress {
-            /* gets rid of default border in Firefox and Opera. */
-            border: none;
-            /* Needs to be in here for Safari polyfill so background images work as expected. */
-            background-size: auto;
-        }
-        .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
-            background: #F44336;
-        }
-    </style>
-  <progress value='2000' class='' max='2000' style='width:300px; height:20px; vertical-align: middle;'></progress>
-  100.00% [2000/2000 00:04<00:00]
+  100.00% [4000/4000 00:02<00:00]
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prior</span><span class="p">[</span><span class="s1">&#39;noise&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x18d7e50e640&gt;]
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_21_1.png" src="_images/mcmc_21_1.png" />
+<img alt="_images/mcmc_23_0.png" src="_images/mcmc_23_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prior</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">])</span>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prior</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x18d7e543be0&gt;]
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_22_1.png" src="_images/mcmc_22_1.png" />
+<img alt="_images/mcmc_24_0.png" src="_images/mcmc_24_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">prior</span><span class="p">[</span><span class="s1">&#39;noise&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(array([155., 163.,  83.,  51.,  28.,  12.,   2.,   3.,   0.,   3.]),
- array([0.06716536, 1.05624691, 2.04532845, 3.03440999, 4.02349153,
-        5.01257308, 6.00165462, 6.99073616, 7.97981771, 8.96889925,
-        9.95798079]),
- &lt;BarContainer object of 10 artists&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_23_1.png" src="_images/mcmc_23_1.png" />
+<img alt="_images/mcmc_25_0.png" src="_images/mcmc_25_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">prior</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">])</span>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">prior</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(array([ 11.,  34.,  64.,  90., 102.,  98.,  68.,  19.,  11.,   3.]),
- array([-2.49335519, -1.92920587, -1.36505656, -0.80090724, -0.23675793,
-         0.32739139,  0.8915407 ,  1.45569002,  2.01983933,  2.58398865,
-         3.14813797]),
- &lt;BarContainer object of 10 artists&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_24_1.png" src="_images/mcmc_24_1.png" />
+<img alt="_images/mcmc_26_0.png" src="_images/mcmc_26_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">posterior</span><span class="p">[</span><span class="s1">&#39;noise&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x18d7e8bf8e0&gt;]
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_25_1.png" src="_images/mcmc_25_1.png" />
+<img alt="_images/mcmc_27_0.png" src="_images/mcmc_27_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">posterior</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">])</span>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">posterior</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x18d7e91fd30&gt;]
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_26_1.png" src="_images/mcmc_26_1.png" />
+<img alt="_images/mcmc_28_0.png" src="_images/mcmc_28_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">posterior</span><span class="p">[</span><span class="s1">&#39;noise&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(array([952., 743., 209.,  66.,  20.,   5.,   4.,   0.,   0.,   1.]),
- array([ 0.55580479,  1.52099354,  2.4861823 ,  3.45137106,  4.41655981,
-         5.38174857,  6.34693733,  7.31212608,  8.27731484,  9.2425036 ,
-        10.20769236]),
- &lt;BarContainer object of 10 artists&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_27_1.png" src="_images/mcmc_27_1.png" />
+<img alt="_images/mcmc_29_0.png" src="_images/mcmc_29_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">posterior</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">])</span>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">posterior</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(array([  4.,  10.,  37., 128., 424., 763., 471., 123.,  29.,  11.]),
- array([-1.63908078, -1.27453999, -0.90999919, -0.54545839, -0.1809176 ,
-         0.1836232 ,  0.548164  ,  0.9127048 ,  1.27724559,  1.64178639,
-         2.00632719]),
- &lt;BarContainer object of 10 artists&gt;)
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/mcmc_28_1.png" src="_images/mcmc_28_1.png" />
+<img alt="_images/mcmc_30_0.png" src="_images/mcmc_30_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">posterior</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">])</span>
+<span></span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">posterior</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.3980271214250416
+0.37334780701568226
 </pre></div></div>
 </div>
 </section>
@@ -903,8 +847,9 @@ The acceptance probability does not match the target. It is 0.7133518846410769, 
 <li class="toctree-l1"><a class="reference internal" href="bayes_ts.html">Bayes' and Thompson Sampling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particle_ts.html">Flexible Thompson Sampling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="particle_drift.html">Adding Drift to a Particle Filter</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#MCMC">MCMC</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to Markov Chains</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#MCMC">MCMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#PyMC3">PyMC3</a></li>
 </ul>
 </li>
