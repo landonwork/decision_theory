@@ -13,7 +13,7 @@ Welcome to Decision Theory's documentation!
    Course Overview <overview>
    Elements of Decision Theory <elements>
    Basic Probability <probability>
-   Basic Statistics <statistics>
+   Utility Functions <utility>
    Bayes' Rule <bayes>
    Bayes' Rule Discrete Example <covid_bayes>
    Bayes' and Thompson Sampling <bayes_ts>

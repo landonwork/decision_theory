@@ -1,0 +1,745 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Utility &#8212; Decision Theory 12/05/2021 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Bayesian Inference" href="bayes.html" />
+    <link rel="prev" title="Probability" href="probability.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Utility">
+<h1>Utility<a class="headerlink" href="#Utility" title="Permalink to this headline">¶</a></h1>
+<section id="Thought-Experiment--">
+<h2>Thought Experiment -<a class="headerlink" href="#Thought-Experiment--" title="Permalink to this headline">¶</a></h2>
+<p>Some examples. I can go find a simple one, but the point is…</p>
+</section>
+<section id="Utility-Theory">
+<h2>Utility Theory<a class="headerlink" href="#Utility-Theory" title="Permalink to this headline">¶</a></h2>
+<p>The above examples demonstrate how people can react to the same gamble in different ways because of personal details. Even if the expected value of a gamble is positive, the worth of that gamble will vary from person to person and even from time to time for the same person. They same can be said of businesses too. Some people may value having a savings over having things. Some businesses may value market share over profit. These difference between profit and loss and actual preferences
+necessitate utility theory. Myerson and Zambrano (2019) define utility thoery as “a method of computing optimal decisions based on people’s willingness to accept different risks.” While utility theory will never perfectly model a person’s brain, it help our computational methods recommend actions that are more in line with our preferences as decision makers.</p>
+<p>In utility theory, it is assumed that a rational decision maker has a utility function by which they judge the worth of different outcomes. In order to be useful and numerically modeled they follow a few assumptions. First, that (I don’t know if I actually have to them in here… completeness, transitivity, etc.).</p>
+<p>A common way to represent a person’s utility function (when different payoffs are monetary) is with a risk tolerance formula <span class="math notranslate nohighlight">\(U(x) = -e^{(-x/r)}\)</span>, where <span class="math notranslate nohighlight">\(r\)</span> is a positive number that represents a person’s risk tolerance. For simplicity, we will also assume that an individual’s risk tolerance stays constant no matter what is going on around them.</p>
+<p>When using utility for decision making, we will want to do two things to make it useful. First, instead of calculating expected monetary value, we calculate expected utility based on the individual’s utility function and the probabilities of each outcome. Second, we want to deal with numbers that have the same units, so after converting to utility, we will convert back to currency in order to find the <em>certainty equivalent</em>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">util</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">util</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-3.720075976020836e-44
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">.05</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">util</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/utility_5_0.png" src="_images/utility_5_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">util</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/utility_6_0.png" src="_images/utility_6_0.png" />
+</div>
+</div>
+<p>As you can see, the line straightens out as <span class="math notranslate nohighlight">\(r\)</span> increases ##TODO - add axis labels##. The more tolerant a person is to risks, the closer the person’s utility is to being a straight line. A person whose utility function is a perfectly straight line is a <em>risk-neutral</em> decision maker. When a person is risk neutral, they will generally accept any gamble for the fair value. For example, a gamble that has a 50% percent chance of paying out \$2,000 and a 50% chance of not paying out has an
+expected monetary value of \$1,000. ##TODO - be sure to explain expected value in the probability bit## A risk-neutral decision maker would take this gamble if they were required to pay any amount less than $1,000. Any amount greater and they would refuse. This is called the <em>certainty equivalent</em>, the most a decision maker would be willing to pay for a certain set of payoffs. But certainty equivalents are only interesting for decision maker’s that are not risk-neutral and so we need a way to
+convert utility back to monetary units. For this, we reverse the operations performed on <span class="math notranslate nohighlight">\(x\)</span> in our utility function and call the function <em>uinv</em>, short for utility inverse.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">uinv</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">r</span>
+</pre></div>
+</div>
+</div>
+<p>Some special facts about our utility function is that utility will always be less than or equal to -1. Because of this, maximizing utility will be the same as bringing utility as close to zero (or making it the least negative) as possible. Also, the parameter <span class="math notranslate nohighlight">\(r\)</span> for risk tolerance must always be positive. (If we were instead using a loss function, we would desire to make the loss as negative as possible). For simplicity’s sake we will assume that risk tolerance stays the same for a person
+no matter what situation they are in.</p>
+<section id="Example-problem">
+<h3>Example problem<a class="headerlink" href="#Example-problem" title="Permalink to this headline">¶</a></h3>
+<p>Suppose that for a price, You are able to participate in a gamble. With 50% probability the gamble will pay out \$500, with 30% probability it will pay out \$100, and with 20% probability you will not receive anything. If your risk tolerance is equal to 50, what is the most you would be willing to pay to take the gamble?</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># First, we will define a little function that will compute the expected utility</span>
+<span class="c1"># of a set of payoffs and their respective probabilities</span>
+<span class="k">def</span> <span class="nf">e_util</span><span class="p">(</span><span class="n">payoffs</span><span class="p">,</span> <span class="n">probs</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="n">probs</span> <span class="o">=</span> <span class="n">probs</span><span class="o">/</span><span class="n">probs</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="c1"># This will guarantee the probability weights sum to 1</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">util</span><span class="p">(</span><span class="n">payoffs</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">probs</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># Then we find expected utility with the new function and convert to dollars</span>
+<span class="n">payoffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">])</span>
+<span class="n">r</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">e_u</span> <span class="o">=</span> <span class="n">e_util</span><span class="p">(</span><span class="n">payoffs</span><span class="p">,</span> <span class="n">probs</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<span class="n">uinv</span><span class="p">(</span><span class="n">e_u</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+71.22613507523758
+</pre></div></div>
+</div>
+<p>A: $71.23</p>
+</section>
+</section>
+<section id="St. Petersburg-Paradox">
+<h2>St. Petersburg Paradox<a class="headerlink" href="#St. Petersburg-Paradox" title="Permalink to this headline">¶</a></h2>
+<p>The St. Petersbug Paradox is another way to demonstrate the diminishing marginal returns imbued n a utility function. It is a gamble with an infinite expected value. It goes like this. The initial payoff is set to $1. Then a coin is tossed until you observe heads. For every toss, the payoff is doubled. the expected payoff is calculated like this:</p>
+<p><span class="math">\begin{align}
+E(\text{Payoff}) &= .5 * 2 + .25 * 4 + .125 * 8 + .0625 * 16 + ... \\
+E(\text{Payoff}) &= 1      + 1       + 1        + 1          + ... \\
+E(\text{Payoff}) &= \infty
+\end{align}</span></p>
+<p>Because the probability of obtaining a certain number of tosses is halved for every additional tosses and the reward is doubled at each toss, this gamble has a theoretical expected payoff of infinite value. However, we can show using utility thoery that the expected payoff in a person’s mind is much much less. This is because of the fact that every additional dollar a person gains provides less happiness than the additional dollar.</p>
+<p>Take the same individual that had a risk tolerance of 50. Find the utility for each possible payoff, multiply by their respective probabilities, and sum to get the certainty equivalent of this individual. Compare this to the expected monetary value and we will see that the individual’s expected gain from this gamble levels off at a particular value while the expected monetary value continues to increase linearly as we continue to add terms.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">payoffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">.5</span><span class="p">])</span>
+<span class="n">r</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="n">emvs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ces</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">emv</span> <span class="o">=</span> <span class="p">(</span><span class="n">payoffs</span> <span class="o">*</span> <span class="n">probs</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="c1"># Expected monetary value</span>
+    <span class="n">ce</span> <span class="o">=</span> <span class="n">uinv</span><span class="p">(</span><span class="n">e_util</span><span class="p">(</span><span class="n">payoffs</span><span class="p">,</span> <span class="n">probs</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="mi">50</span><span class="p">)</span> <span class="c1"># Certainty equivalent</span>
+    <span class="c1"># print(emv, ce)</span>
+    <span class="n">emvs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">emv</span><span class="p">)</span>
+    <span class="n">ces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ce</span><span class="p">)</span>
+
+    <span class="n">payoffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">payoffs</span><span class="p">,</span> <span class="n">payoffs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span> <span class="n">probs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">emvs</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">ces</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/utility_17_0.png" src="_images/utility_17_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ces</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+6.135139359479417
+</pre></div></div>
+</div>
+<p>The value of the coin toss gamble to this individual would not be infinite. Instead it would have a finite value of around \$6.15. This is because even though the reward doubles with each coin flip, the utility of the outcome for this individual does not double. This will be true for any person who has a utility function of the same form.</p>
+<p>I will also take this opportunity to demonstrate how powerful and applicable raw computational power is for analyzing probabilistic models like this one.</p>
+<p>The expected monetary value for this gamble <em>should</em> be infinite, but from simulated trials, the expected monetary is actually close to about \$20. We can simulate this simple gamble in a small loop and calculate the average payoff to find this. For fun, we will also add in a bar chart with the frequency of the number of flips in each trial.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">coin_toss</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;heads&#39;</span><span class="p">,</span><span class="s1">&#39;tails&#39;</span><span class="p">])</span>
+
+<span class="n">payoffs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">tosses</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100_000</span><span class="p">):</span>
+    <span class="n">n_tosses</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">payoff</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">toss</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">while</span> <span class="n">toss</span> <span class="o">!=</span> <span class="s1">&#39;heads&#39;</span><span class="p">:</span>
+        <span class="n">toss</span> <span class="o">=</span> <span class="n">coin_toss</span><span class="p">()</span>
+        <span class="n">n_tosses</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">payoff</span> <span class="o">*=</span> <span class="mi">2</span>
+    <span class="n">payoffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">payoff</span><span class="p">)</span>
+    <span class="n">tosses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n_tosses</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">payoffs</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+26.64832
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">count</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">tosses</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">25</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/utility_23_0.png" src="_images/utility_23_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">tosses</span><span class="p">),</span> <span class="n">count</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">tosses</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(19, 1.0)
+</pre></div></div>
+</div>
+<p>Though it is difficult to see on the histogram, there are a few trials with over 11 coin tosses. Each of those trials would payout over \$1,000. With the seed we set, we even observe one trial with <em>19</em> tosses. That’s a payout of \$524,288 which we have only a 1 in 524,288 chance of seeing. We were lucky to see this rare of a trial with a sample size of only 100,000. And yet, even with these ridiculous payouts, the average size of one is only \$26.65. Therefore, any reasonable person would
+likely never pay more than this amount in order to play this game.</p>
+</section>
+<section id="Using-Data-to-Infer-Risk-Tolerance">
+<h2>Using Data to Infer Risk Tolerance<a class="headerlink" href="#Using-Data-to-Infer-Risk-Tolerance" title="Permalink to this headline">¶</a></h2>
+<p>Another useful thing we can do with this is to try to infer the risk tolerance of a decision maker. This course focuses more on the how to make decisions rather than how to infer another’s decision-making preferences. However, this will be a great example of probabilistic modeling with PyMC3. To learn more about this, you can go to the PyMC3 section of the course.</p>
+</section>
+<section id="Examples">
+<h2>Examples<a class="headerlink" href="#Examples" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Alternative-Utility-Functions">
+<h2>Alternative Utility Functions<a class="headerlink" href="#Alternative-Utility-Functions" title="Permalink to this headline">¶</a></h2>
+<section id="Isoelastic-Utility">
+<h3>Isoelastic Utility<a class="headerlink" href="#Isoelastic-Utility" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Has a risk aversion parameter and can model risk seeking behavior (something our current utility function cannot do).</p></li>
+<li><p>The isoelastic utility function has the form <span class="math notranslate nohighlight">\(u(c) = \frac{c^{1 - \eta} - 1}{\eta - 1}\)</span>, where <span class="math notranslate nohighlight">\(\eta\)</span> is the risk aversion parameter. This is function holds except when <span class="math notranslate nohighlight">\(\eta = 1\)</span>, in which case the function <span class="math notranslate nohighlight">\(u(c) = \ln(c)\)</span> is used instead.</p></li>
+</ul>
+</section>
+<section id="Prospect-Theory-and-Marginal-Utility">
+<h3>Prospect Theory and Marginal Utility<a class="headerlink" href="#Prospect-Theory-and-Marginal-Utility" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Prospect theory takes a different view of utility and assumes that decision makers choose things that give them the most utility <em>on the margin</em>. It proposes that decision makers have an internal <em>marginal</em> utility function which takes into account changes in their status quo.</p></li>
+<li><p>The authors of the paper (here) suggest that the marginal utility function is much steeper on the negative side of the x-axis as opposed to the positive side. They observed that test participants were much more sensitive to losses than they were to gains of equal magnitude. They propose this assymetrical utility function for this reason.</p></li>
+<li><p>They also support the idea of diminishing marginal returns (and losses) for each marginal gain or loss.</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">margin_util</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span> <span class="c1"># a is a person&#39;s loss aversion</span>
+    <span class="c1"># This is necessary but avoids printing an irrelevant warning</span>
+    <span class="kn">import</span> <span class="nn">warnings</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">RuntimeWarning</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mf">.05</span><span class="p">,</span><span class="mf">.05</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">.05</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mf">.05</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">margin_util</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/utility_35_0.png" src="_images/utility_35_0.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Decision Theory</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Course Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elements.html">Elements of Decision Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="probability.html">Basic Probability</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Utility Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Thought-Experiment--">Thought Experiment -</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Utility-Theory">Utility Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#St. Petersburg-Paradox">St. Petersburg Paradox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Using-Data-to-Infer-Risk-Tolerance">Using Data to Infer Risk Tolerance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Alternative-Utility-Functions">Alternative Utility Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bayes.html">Bayes' Rule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covid_bayes.html">Bayes' Rule Discrete Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bayes_ts.html">Bayes' and Thompson Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particle_ts.html">Flexible Thompson Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="particle_drift.html">Adding Drift to a Particle Filter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcmc.html">Introduction to Markov Chains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pymc3.html">Introduction to PyMC3</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="probability.html" title="previous chapter">Probability</a></li>
+      <li>Next: <a href="bayes.html" title="next chapter">Bayesian Inference</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Landon Work.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/utility.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
