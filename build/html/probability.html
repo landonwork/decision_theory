@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Probability &#8212; Decision Theory 12/05/2021 documentation</title>
+    <title>The Subject of Probability &#8212; Decision Theory 12/05/2021 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -284,40 +284,24 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<section id="Probability">
-<h1>Probability<a class="headerlink" href="#Probability" title="Permalink to this headline">¶</a></h1>
-<section id="Ideologies-on-Probability">
-<h2>Ideologies on Probability<a class="headerlink" href="#Ideologies-on-Probability" title="Permalink to this headline">¶</a></h2>
-<p>Probability as the basis for statistics and an intricate tool used for dealing with what we call non-deterministic events; that is, we do not know the outcome of an event before it occurs. Most mathematics deals with deterministic events, e.g. “If I have 5 apples and you take 1 away, I have 4 apples left.” Probability does not work the same way since I can roll a pair of dice several times and each roll can come out differently. It is often described as “being up to chance” what the outcome will
-be even though chance is not an actor that can be responsible for anything. What is responsible for different results? We do not know. In events where not everything is known, we rely on probability to help use decide what can happen. Because of this, it is essential to be certain of one’s interpretation of probability when approaching it, especially when looking to make decisions.</p>
-<p>Mathematicians have no need to create an interpretation for probability. They simply define a function <span class="math notranslate nohighlight">\(P(x)\)</span> and its properties and create theorems and proofs built on these functions. The everyday decision-maker is in a much different position where they are given problems and tools and left to find an optimal solution. The interpretation is needed to know how to apply these tools. So how can we use the tools of probability to make decisions?</p>
-<p>The two major schools of thought on probability are the subjective and frequentist approaches.</p>
-<ul>
-<li><p><strong>Subjective probability</strong></p>
-<p>In subjective probability, the value of a probability (which is greater than or equal to 0 and less than or equal to 1, or bounded on <span class="math notranslate nohighlight">\([0,1]\)</span>) represents the strength of our belief that a specific event will occur. Therefore, <span class="math notranslate nohighlight">\(P(A)=0\)</span> represents an absolute belief that event <span class="math notranslate nohighlight">\(A\)</span> <strong>will not</strong> occur and <span class="math notranslate nohighlight">\(P(A)=1\)</span> represents an absolute belief that event <span class="math notranslate nohighlight">\(A\)</span> <strong>will</strong> occur. In everyday conversation, this often extends to outcomes that have already happened but their
-outcome is still unobserved. This is somewhat reminiscent of Schrodinger’s cat. Physicist Erwin Schrodinger postulated that a cat put into a box rigged with a deadly trap, as long as the box was left alone and unobserved for a time, could be counted as both dead and alive. When the box was opened, the cat would become either dead or alive in the exact moment that its state was observed. Without getting into quantam mechanics (or animal rights), we will think of a passive observer in
-Schrodinger’s example. Logically, the observer knows that the cat is presently either alive or dead. However, in the moments leading up to the reveal of the cat’s state, the observer will have some belief about the cat’s state. If they think the cat has an equal chance of being alive or dead, then the cat would be considered 50 percent alive and 50 percent dead. In contrast, if the observer believes the cat is more likely to be alive than dead, then they could consider to the cat to be 75
-percent alive and 25 percent dead.</p>
-</li>
-<li><p><strong>Frequentist probability</strong></p>
-<p>The alternative approach to subjective probability is frequentist and it would consider the entire preceding paragraph as absurd. The frequentist believes that a cat can never be both alive and dead. Instead, the frequentist makes an assumption (a null hypothesis) which would likely be that the cat is alive since it entered alive, and they until they receive sufficient evidence to disprove their assumption, they will continue to believe that one thing. For decades, this is how hypotheses have
-been evaluated in the scientific community. Any hypothesis can be valid as long as researchers can produce results that are statistically significant. This leads to much confusion as other researchers produce contradictory results that are also statistically significant. The resulting chaos is difficult to resolve in part because when states of nature are boiled down to “statistically significant” and “not statistically significant” the results of the two studies become difficult to compare.
-The frequentist approach is also limited in its interpretability for isolated events. Frequentists interpret <span class="math notranslate nohighlight">\(P(A)\)</span> as the general frequency with which event <span class="math notranslate nohighlight">\(A\)</span> occurs when the situation is repeated a large number of times. This is a useless approach when trying to determine the outcome of an experiment that has never happened before; e.g., the outcome of an election or sports match, the next time a supervolcano will erupt on Earth, or the chance of a third World War starting in
-a certain year. Whereas a pair of dice we can reroll as many times as we like to find their roll frequency, these events are much too isolated and the experiments too different from each other to ever create an interpretation that would satisfy the frequentist ideology.</p>
-</li>
-</ul>
-<p>In this course, we will use the subjective approach, the same interpretation of probability as Lancaster (2004), since it is how we in everyday life and since it will enable us to calculate and interpret many useful things including expected values.</p>
+<section id="The-Subject-of-Probability">
+<h1>The Subject of Probability<a class="headerlink" href="#The-Subject-of-Probability" title="Permalink to this headline">¶</a></h1>
+<p>Probability is the basis for statistics and an intricate tool used for dealing with what we call non-deterministic events; that is, we do not know the outcome of an event before it occurs. Most of mathematics deals with deterministic events, e.g. “If I have 5 coins and you take 1 away, I have 4 coins left.” Probability does not work the same way since I can flip a coin several times and each flip can come out differently. It is often described as “being up to chance” what the outcome will be
+even though chance is not an actor that can be responsible for anything. What is responsible for different results? We do not know. In events where not everything is known, we rely on probability to help us understand what can happen. Because of this, it is essential to be certain of one’s interpretation of probability, especially when looking to make decisions.</p>
+<p>We all think that we understand probability, but as mentioned before probability is an intricate tool. Take special care with the definitions provided in this chapter. Probability is not an intuitive subject. Random improbable events happen, and yet we are surprised when they happen to us. The exclamation “Impossible! There was only a 1% chance of that happening!” contradicts itself. The one-percent chance is a very real chance. In our minds, we have some belief about how probable an event is to
+happen and often we say a 1% chance is not enough to consider a valid possibility and we discard it. Perhaps for small stakes this is acceptable, but in other cases the 1% chance of a large loss may need to be considered. In fact, if the experiment where the undesirable outcome can happen is performed 1000 times, it would be more surprising <em>not</em> to see this outcome at least once.</p>
+<p>This chapter explains how use probability as a tool instead of as a reason to dismiss the improbable.</p>
+<section id="What-is-a-Probability?">
+<h2>What is a Probability?<a class="headerlink" href="#What-is-a-Probability?" title="Permalink to this headline">¶</a></h2>
+<p>First, let us define a probability (or a chance as is often used) as “the expected frequency with which a certain outcome is observed when an experiment is repeated indefinitely.” This tells us a couple things about a probability. Its value is always between 0 and 1, and its “true” value can never be observed since we cannot infinitely flip a coin or repeat any other sort of experiment. However, because it is an <em>expected</em> frequency, we do not need to know the “true” value of a probability to
+make use of it.</p>
+<p>Another detail we must specify is whether this experiment has been performed already or not. In this course, we will approach problem from a subjectivist’s perspective where anything unknown can be assigned a probability. This is opposed to a frequentist’s perspective which is only concerned with the true state of the world. Say a teacher tosses a coin, catches it, and asks a student the probability of it being heads. Most people would say 50 percent without even thinking. They are saying that
+they expect the coin to be heads just as much as they expect it to be tails. A frequentist would say, “You have already tossed the coin. Probability is not appropriate in this situation.” This course is not designed for that inflexible kind of thinking. Instead, we will use the subjectivist perspective since that is more similar to the way we already think of probability.</p>
 </section>
 <section id="Probability-Terms">
 <h2>Probability Terms<a class="headerlink" href="#Probability-Terms" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>sample space - the set of all possible outcomes and events from an experiment; also, the set of values (or domain) that a random variable can take on</p></li>
-<li><p>experiment - a situation with an outcome (or several) that is represented by a random variable; remember, in our interpretations the experiment can already have run to completion without us having observed an outcome</p></li>
-<li><p>random variable (rv) - a component in an experiment that takes on a value</p></li>
-<li><p>outcome - the state of our random variable at the end of an experiment, whether observed or not</p></li>
-<li><p>state - a deterministic value for a variable</p></li>
-<li><p>event - a set of outcomes for an experiment; e.g. <span class="math notranslate nohighlight">\(A\)</span> can be defined as rolling a pair of dice and obtaining an even number</p></li>
-</ul>
+<p>TODO: I need to find a way to use these in a narrative to illustrate them. * sample space - the set of all possible outcomes and events from an experiment; also, the set of values (or domain) that a random variable can take on * experiment - a situation with one or more outcomes; remember, in our interpretations the experiment can already have run to completion without us having observed an outcome * random variable (rv) - a component in an experiment that takes on a value * outcome - the
+state of our random variable at the end of an experiment, whether observed or not * state - a deterministic value for a variable * event - a set of outcomes for an experiment; e.g. <span class="math notranslate nohighlight">\(A\)</span> can be defined as rolling a pair of dice and obtaining an even number</p>
 </section>
 <section id="Random-Variables">
 <h2>Random Variables<a class="headerlink" href="#Random-Variables" title="Permalink to this headline">¶</a></h2>
@@ -532,7 +516,7 @@ numbers <span class="math notranslate nohighlight">\((-\infty, \infty)\)</span>.
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Course Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="elements.html">Elements of Decision Theory</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Probability</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#Ideologies-on-Probability">Ideologies on Probability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#What-is-a-Probability?">What is a Probability?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Probability-Terms">Probability Terms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Random-Variables">Random Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Joint,-Marginal,-and-Conditional-Probability">Joint, Marginal, and Conditional Probability</a></li>

@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="An Introduction to Decision Theory" href="elements.html" />
-    <link rel="prev" title="Welcome to Decision Theory’s documentation!" href="index.html" />
+    <link rel="prev" title="Welcome to Decision Theory for Analysts" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -289,70 +289,20 @@ div.rendered_html tbody tr:hover {
 <section id="Welcome-to-the-Course!">
 <h2>Welcome to the Course!<a class="headerlink" href="#Welcome-to-the-Course!" title="Permalink to this headline">¶</a></h2>
 <p><strong>Welcome, all!</strong></p>
-<p>This is a course made for anyone who has to make decisions under uncertainty in their daily lives, namely everyone. The goal is simple. To turn normally complaex probabilistic problems into simple, easy-to-understand coding problems. By the time the course is finished being written, it should enable anyone with some probability and coding background to represent the probability of desired or undesired outcomes depending and the decisions we can make, as well as different approaches to using this
-new information.</p>
-<p>Due to the ubiquity of uncertainty and omnipresent decisions in our lives, this course can and should be perused–if not scoured–for personal gain by everyone. If I may break from third person perspective for a moment, I am not a professor or otherwise incentivized to sound extra smart. I am a graduate student in Data Science who is trying to take advantage of his mentor and learn about a subject that he could otherwise receive no instruction on. At the end of my independent study, I will receive
-a grade, so I have to keep my tone professional and present accurate and useful information that demonstrates my understanding. However, I don’t care as much about the grade as I do about learning this properly and I know if I cannot present it simply, I do not understand the subject deeply enough.</p>
-<p>Let me also make a note that the easiest way to navigate the course will be to use the sidebar on the left. I am using a Python package called Sphinx to create this course. This is the simplest way I knew how to create this course. Sorry for any inconvenience. :)</p>
-<p>The point is, this course (which is expected to be finished by December 2021 and polished by May 2022) is designed for anyone to read and understand. The principles of decision theory are based on rationality; that is, making decisions the way someone would expect themself to if they were to use all the information they were provided and keep their ultimate goals in mind. Much of the initial conversation in the course will be explained in a way that requires little to no knowledge of mathematics
-or probability. The examples contain math and probability but they should by no means be necessary to understand the concepts. Later, there will be examples that focus much more on the programming behind the practical application</p>
-</section>
-<section id="Summary">
-<h2>Summary<a class="headerlink" href="#Summary" title="Permalink to this headline">¶</a></h2>
-<p>The Decision Theory course should give mention to the many authors and works that it draws inspiration from. Firstly, it covers the discussion and key points in <em>Decision Theory - Principles and Approaches</em> by Giovanni Parmigiani and Lurdes Inoue. It also draws from <em>Elementary Decision Theory</em> by <strong>these guys</strong>. When we get to the more technical examples, the course will introduce example problems from <em>Introduction to Modern Bayesian Econometrics</em> by Lancaster and <em>Probability Models for
-Economic Decisions</em> by Myerson and Zambrano.</p>
-<p>The order of the material will be:</p>
-<ol class="arabic simple">
-<li><p>Introduction</p></li>
-<li><p>Principles of Decision-Making</p>
-<ol class="arabic simple">
-<li><p>Dutch Book Theorem</p></li>
-</ol>
-</li>
-<li><p>Discussing and Visualizing data</p></li>
-<li><p>Probability</p>
-<ol class="arabic simple">
-<li><p>Independent random variables</p></li>
-<li><p>Probability density functions</p></li>
-<li><p>Correlation and Multivariate Normally Distributed Variables</p></li>
-<li><p>States of Nature</p></li>
-<li><p>Samples and populations</p></li>
-<li><p>Conditional Expectation</p></li>
-</ol>
-</li>
-<li><p>Bayesian Statistics</p>
-<ol class="arabic simple">
-<li><p>Bayes’ Rule</p></li>
-<li><p>Likelihood</p></li>
-<li><p>Prior</p></li>
-<li><p>Posterior</p></li>
-<li><p>Inference</p></li>
-<li><p>Point Estimation</p></li>
-<li><p>Confidence Intervals</p></li>
-<li><p>Hypothesis Testing</p></li>
-</ol>
-</li>
-<li><p>Utility Theory</p>
-<ol class="arabic simple">
-<li><p>Utility Functions</p></li>
-<li><p>St. Petersburg “Paradox”</p></li>
-<li><p>Optimization</p></li>
-<li><p>Risk Sharing and Finance</p></li>
-</ol>
-</li>
-<li><p>Simulation</p>
-<ol class="arabic simple">
-<li><p>Risks of Using Models</p></li>
-<li><p>Traditional Simulation</p></li>
-<li><p>Dynamic Models</p>
-<ol class="arabic simple">
-<li><p>Markov Chains and MCMC</p></li>
-<li><p>Thompson Sampling</p></li>
-</ol>
-</li>
-</ol>
-</li>
-</ol>
+<p>This is a course made for anyone who has to make decisions under uncertainty in their daily lives, namely everyone. The concepts should be useful to anyone who experiences risk, but the practical application is designed for those who will make decisions for their business or place of employment. The goal is simple. To turn normally complex probabilistic problems into easy-to-understand coding problems. It should enable anyone with some probability and coding knowledge (especially Python 3) to
+represent the probability of desired or undesired outcomes and the decisions we can make, as well as understand different approaches to using this new information.</p>
+<p>This course will take you through how to manage risk based on probable outcomes of different decisions. First, we will discuss what risk is and cover the basic concepts of probability which is the base of statistics, and utility and loss which decision theory uses to evaluate outcomes. From there, we will cover probabilistic problems using coding, starting with simulation, the Thompson sampling, and Monte-Carlo Markov Chains (MCMC). There will be simple code snippets in the early sections with
+more programming and techniques as the course goes on. The easiest way to navigate the course will be to use the sidebar on the left.</p>
+<p>Recommended resources:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>* Probability (TODO: link)
+* Anaconda Python (TODO: link)
+* scikit-learn (TODO: link)
+* numpy (TODO: link)
+* matplotlib (TODO: link)
+* PyMC3 (TODO: link)
+</pre></div>
+</div>
+<p>The link for all the source code will go <em>here</em> (TODO)</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
@@ -386,7 +336,6 @@ Economic Decisions</em> by Myerson and Zambrano.</p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Course Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#Welcome-to-the-Course!">Welcome to the Course!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Summary">Summary</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="elements.html">Elements of Decision Theory</a></li>
@@ -405,7 +354,7 @@ Economic Decisions</em> by Myerson and Zambrano.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Decision Theory’s documentation!</a></li>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Decision Theory for Analysts</a></li>
       <li>Next: <a href="elements.html" title="next chapter">An Introduction to Decision Theory</a></li>
   </ul></li>
 </ul>
